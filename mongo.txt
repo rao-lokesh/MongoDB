@@ -1,0 +1,965 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\Lokesh> mongosh mongodb+srv://lokesh22csu314:VkX4WsmHizmjwwzp@cluster0.bfd0n.mongodb.net/ncu
+Current Mongosh Log ID: 66ed22e83576bd6daf2710bb
+Connecting to:          mongodb+srv://<credentials>@cluster0.bfd0n.mongodb.net/ncu?appName=mongosh+2.3.0
+Using MongoDB:          7.0.12
+Using Mongosh:          2.3.0
+mongosh 2.3.1 is available for download: https://www.mongodb.com/try/download/shell
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.orders.find();
+[
+  {
+    _id: ObjectId('66d02b45f82c7d275e2710be'),
+    order_id: 3,
+    order_price: 149,
+    order_name: 'pqr',
+    user_id: 3,
+    product_id: [ 2, 3 ]
+  },
+  {
+    _id: ObjectId('66d1793fdb8e30e9152710bc'),
+    order_id: 2,
+    order_price: 399,
+    order_name: 'fgb',
+    user_id: 2,
+    product_id: [ 1, 2 ]
+  },
+  {
+    _id: ObjectId('66d17d71db8e30e9152710bd'),
+    order_id: 5,
+    order_price: 499,
+    order_name: 'dfgfdh',
+    user_id: 2
+  },
+  {
+    _id: ObjectId('66d17f5cdb8e30e9152710be'),
+    order_id: 6,
+    order_price: 499,
+    order_name: 'dh',
+    user_id: 2
+  },
+  {
+    _id: ObjectId('66dab30047cb073f4d2710bc'),
+    order_id: 1,
+    order_price: 149,
+    order_name: 'vvv',
+    user_id: 1
+  },
+  {
+    _id: ObjectId('66dab30047cb073f4d2710bd'),
+    order_id: 4,
+    order_price: 249,
+    order_name: 'mno',
+    user_id: 2
+  }
+]
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.find();
+[
+  {
+    _id: ObjectId('66c849fc10df8caf532710bc'),
+    user_id: 1,
+    name: 'Lokesh',
+    ph_no: 12345678
+  },
+  {
+    _id: ObjectId('66c84ae010df8caf532710be'),
+    user_id: 3,
+    name: 'Nilesh',
+    ph_no: 5678987654
+  },
+  {
+    _id: ObjectId('66c84ae010df8caf532710bd'),
+    user_id: 2,
+    name: 'Mukul',
+    ph_no: 98765876
+  }
+]
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.products.find();
+[
+  {
+    _id: ObjectId('66e3c6126d86ff737d2710bc'),
+    product_id: 1,
+    product_price: 999,
+    product_name: 'Tshirt'
+  },
+  {
+    _id: ObjectId('66e3c6126d86ff737d2710bd'),
+    product_id: 2,
+    product_price: 1299,
+    product_name: 'Shirt'
+  },
+  {
+    _id: ObjectId('66e3c6126d86ff737d2710be'),
+    product_id: 3,
+    product_price: 1599,
+    product_name: 'Jeans'
+  }
+]
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([{$match : {user_id : 2}},
+... {$lookup : {
+...     from : "orders",
+...     localField : "user_id",
+...     foreignField : user_id,
+...     as: "orderList"
+... }},
+... {$unwind : "$orderList"}
+... {$lookup : {
+Uncaught:
+SyntaxError: Unexpected token, expected "," (9:0)
+
+   7 | }},
+   8 | {$unwind : "$orderList"}
+>  9 | {$lookup : {
+     | ^
+  10 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     from : "products",
+...     localField : "orderList.product_id",
+Uncaught:
+SyntaxError: Missing semicolon. (2:14)
+
+  1 |     from : "products",
+> 2 |     localField : "orderList.product_id",
+    |               ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     foreignField : "product_id",
+...     as : "orderList.products"
+Uncaught:
+SyntaxError: Missing semicolon. (2:6)
+
+  1 |     foreignField : "product_id",
+> 2 |     as : "orderList.products"
+    |       ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     }},{
+Uncaught:
+SyntaxError: Unexpected token (1:4)
+
+> 1 |     }},{
+    |     ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>         $group : {
+...             name :{$first : "$name"},
+Uncaught:
+SyntaxError: Unexpected token (2:36)
+
+  1 |         $group : {
+> 2 |             name :{$first : "$name"},
+    |                                     ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>             user_id : {$first : "$user_id"},
+Uncaught:
+SyntaxError: Unexpected token (1:43)
+
+> 1 |             user_id : {$first : "$user_id"},
+    |                                            ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>             orders : {$push : "$orderList"}
+$orderList
+Atlas atlas-119p6w-shard-0 [primary] ncu>         }
+Uncaught:
+SyntaxError: Unexpected token (1:8)
+
+> 1 |         }
+    |         ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([{$match : {user_id : 2}},
+... {$lookup : {
+...     from : "orders",
+...     localField : "user_id",
+...     foreignField : user_id,
+...     as: "orderList"
+... }},
+... {$unwind : "$orderList"}
+... {$lookup : {
+Uncaught:
+SyntaxError: Unexpected token, expected "," (9:0)
+
+   7 | }},
+   8 | {$unwind : "$orderList"}
+>  9 | {$lookup : {
+     | ^
+  10 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     from : "products",
+...     localField : "orderList.product_id",
+Uncaught:
+SyntaxError: Missing semicolon. (2:14)
+
+  1 |     from : "products",
+> 2 |     localField : "orderList.product_id",
+    |               ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     foreignField : "product_id",
+...     as : "orderList.products"
+Uncaught:
+SyntaxError: Missing semicolon. (2:6)
+
+  1 |     foreignField : "product_id",
+> 2 |     as : "orderList.products"
+    |       ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     }},{
+Uncaught:
+SyntaxError: Unexpected token (1:4)
+
+> 1 |     }},{
+    |     ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>         $group : {
+...             name :{$first : "$name"},
+Uncaught:
+SyntaxError: Unexpected token (2:36)
+
+  1 |         $group : {
+> 2 |             name :{$first : "$name"},
+    |                                     ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>             user_id : {$first : "$user_id"},
+Uncaught:
+SyntaxError: Unexpected token (1:43)
+
+> 1 |             user_id : {$first : "$user_id"},
+    |                                            ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>             orders : {$push : "$orderList"}
+$orderList
+Atlas atlas-119p6w-shard-0 [primary] ncu>         }
+Uncaught:
+SyntaxError: Unexpected token (1:8)
+
+> 1 |         }
+    |         ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([{$match : {user_id : 2}},
+...     {$lookup : {
+...     from : "orders",
+...     localField : "user_id",
+...     foreignField : user_id,
+...     as: "orderList"
+...     }},
+...     {$unwind : "$orderList"}
+...     {$lookup : {
+Uncaught:
+SyntaxError: Unexpected token, expected "," (9:4)
+
+   7 |     }},
+   8 |     {$unwind : "$orderList"}
+>  9 |     {$lookup : {
+     |     ^
+  10 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     from : "products",
+...     localField : "orderList.product_id",
+Uncaught:
+SyntaxError: Missing semicolon. (2:14)
+
+  1 |     from : "products",
+> 2 |     localField : "orderList.product_id",
+    |               ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     foreignField : "product_id",
+...     as : "orderList.products"
+Uncaught:
+SyntaxError: Missing semicolon. (2:6)
+
+  1 |     foreignField : "product_id",
+> 2 |     as : "orderList.products"
+    |       ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     }},{
+Uncaught:
+SyntaxError: Unexpected token (1:4)
+
+> 1 |     }},{
+    |     ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>         $group : {
+...             name :{$first : "$name"},
+Uncaught:
+SyntaxError: Unexpected token (2:36)
+
+  1 |         $group : {
+> 2 |             name :{$first : "$name"},
+    |                                     ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>             user_id : {$first : "$user_id"},
+Uncaught:
+SyntaxError: Unexpected token (1:43)
+
+> 1 |             user_id : {$first : "$user_id"},
+    |                                            ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>             orders : {$push : "$orderList"}
+$orderList
+Atlas atlas-119p6w-shard-0 [primary] ncu>         }
+Uncaught:
+SyntaxError: Unexpected token (1:8)
+
+> 1 |         }
+    |         ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([{$match : {user_id : 2}},
+...     {$lookup : {
+...     from : "orders",
+...     localField : "user_id",
+...     foreignField : user_id,
+...     as: "orderList"
+...     }},
+...     {$unwind : "$orderList"}
+...     {$lookup : {
+Uncaught:
+SyntaxError: Unexpected token, expected "," (9:4)
+
+   7 |     }},
+   8 |     {$unwind : "$orderList"}
+>  9 |     {$lookup : {
+     |     ^
+  10 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     from : "products",
+...     localField : "orderList.product_id",
+Uncaught:
+SyntaxError: Missing semicolon. (2:14)
+
+  1 |     from : "products",
+> 2 |     localField : "orderList.product_id",
+    |               ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     foreignField : "product_id",
+...     as : "orderList.products"
+Uncaught:
+SyntaxError: Missing semicolon. (2:6)
+
+  1 |     foreignField : "product_id",
+> 2 |     as : "orderList.products"
+    |       ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     }},{
+Uncaught:
+SyntaxError: Unexpected token (1:4)
+
+> 1 |     }},{
+    |     ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>         $group : {
+...             name :{$first : "$name"},
+Uncaught:
+SyntaxError: Unexpected token (2:36)
+
+  1 |         $group : {
+> 2 |             name :{$first : "$name"},
+    |                                     ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>             user_id : {$first : "$user_id"},
+Uncaught:
+SyntaxError: Unexpected token (1:43)
+
+> 1 |             user_id : {$first : "$user_id"},
+    |                                            ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>             orders : {$push : "$orderList"}
+$orderList
+Atlas atlas-119p6w-shard-0 [primary] ncu>         }
+Uncaught:
+SyntaxError: Unexpected token (1:8)
+
+> 1 |         }
+    |         ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([{$match : {user_id : 2}},
+...     {$lookup : {
+...     from : "orders",
+...     localField : "user_id",
+...     foreignField : user_id,
+...     as: "orderList"
+...     }},
+...     {$unwind : "$orderList"}
+...     {$lookup : {
+Uncaught:
+SyntaxError: Unexpected token, expected "," (9:4)
+
+   7 |     }},
+   8 |     {$unwind : "$orderList"}
+>  9 |     {$lookup : {
+     |     ^
+  10 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     from : "products",
+...     localField : "orderList.product_id",
+Uncaught:
+SyntaxError: Missing semicolon. (2:14)
+
+  1 |     from : "products",
+> 2 |     localField : "orderList.product_id",
+    |               ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     foreignField : "product_id",
+...     as : "orderList.products"
+Uncaught:
+SyntaxError: Missing semicolon. (2:6)
+
+  1 |     foreignField : "product_id",
+> 2 |     as : "orderList.products"
+    |       ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>     }},{
+Uncaught:
+SyntaxError: Unexpected token (1:4)
+
+> 1 |     }},{
+    |     ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>         $group : {
+...             name :{$first : "$name"},
+Uncaught:
+SyntaxError: Unexpected token (2:36)
+
+  1 |         $group : {
+> 2 |             name :{$first : "$name"},
+    |                                     ^
+  3 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>             user_id : {$first : "$user_id"},
+Uncaught:
+SyntaxError: Unexpected token (1:43)
+
+> 1 |             user_id : {$first : "$user_id"},
+    |                                            ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu>             orders : {$push : "$orderList"}
+$orderList
+Atlas atlas-119p6w-shard-0 [primary] ncu>         }
+Uncaught:
+SyntaxError: Unexpected token (1:8)
+
+> 1 |         }
+    |         ^
+  2 |
+
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([
+...   { $match: { user_id: 2 } },
+...   {
+...     $lookup: {
+...       from: "orders",
+...       localField: "user_id",
+...       foreignField: user_id,
+...       as: "orderList",
+...     },
+...   },
+...   { $unwind: "$orderList" },
+...   {
+...     $lookup: {
+...       from: "products",
+...       localField: "orderList.product_id",
+...       foreignField: "product_id",
+...       as: "orderList.products",
+...     },
+...   },
+...   {
+...     $group: {
+...       name: { $first: "$name" },
+...       user_id: { $first: "$user_id" },
+...       orders: { $push: "$orderList" },
+...     },
+...   },
+... ]);
+ReferenceError: user_id is not defined
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.find();
+[
+  {
+    _id: ObjectId('66c849fc10df8caf532710bc'),
+    user_id: 1,
+    name: 'Lokesh',
+    ph_no: 12345678
+  },
+  {
+    _id: ObjectId('66c84ae010df8caf532710be'),
+    user_id: 3,
+    name: 'Nilesh',
+    ph_no: 5678987654
+  },
+  {
+    _id: ObjectId('66c84ae010df8caf532710bd'),
+    user_id: 2,
+    name: 'Mukul',
+    ph_no: 98765876
+  }
+]
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.orders.find();
+[
+  {
+    _id: ObjectId('66d02b45f82c7d275e2710be'),
+    order_id: 3,
+    order_price: 149,
+    order_name: 'pqr',
+    user_id: 3,
+    product_id: [ 2, 3 ]
+  },
+  {
+    _id: ObjectId('66d1793fdb8e30e9152710bc'),
+    order_id: 2,
+    order_price: 399,
+    order_name: 'fgb',
+    user_id: 2,
+    product_id: [ 1, 2 ]
+  },
+  {
+    _id: ObjectId('66d17d71db8e30e9152710bd'),
+    order_id: 5,
+    order_price: 499,
+    order_name: 'dfgfdh',
+    user_id: 2
+  },
+  {
+    _id: ObjectId('66d17f5cdb8e30e9152710be'),
+    order_id: 6,
+    order_price: 499,
+    order_name: 'dh',
+    user_id: 2
+  },
+  {
+    _id: ObjectId('66dab30047cb073f4d2710bc'),
+    order_id: 1,
+    order_price: 149,
+    order_name: 'vvv',
+    user_id: 1
+  },
+  {
+    _id: ObjectId('66dab30047cb073f4d2710bd'),
+    order_id: 4,
+    order_price: 249,
+    order_name: 'mno',
+    user_id: 2
+  }
+]
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([
+...   { $match: { user_id: 2 } },
+...   {
+...     $lookup: {
+...       from: "orders",
+...       localField: "user_id",
+...       foreignField: user_id,
+...       as: "orderList",
+...     },
+...   },
+...   { $unwind: "$orderList" },
+...   {
+...     $lookup: {
+...       from: "products",
+...       localField: "orderList.product_id",
+...       foreignField: "product_id",
+...       as: "orderList.products",
+...     },
+...   },
+...   {
+...     $group: {
+...       name: { $first: "$name" },
+...       user_id: { $first: "$user_id" },
+...       orders: { $push: "$orderList" },
+...     },
+...   },
+... ]);
+ReferenceError: user_id is not defined
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.orders.find({user_id : 2});
+[
+  {
+    _id: ObjectId('66d1793fdb8e30e9152710bc'),
+    order_id: 2,
+    order_price: 399,
+    order_name: 'fgb',
+    user_id: 2,
+    product_id: [ 1, 2 ]
+  },
+  {
+    _id: ObjectId('66d17d71db8e30e9152710bd'),
+    order_id: 5,
+    order_price: 499,
+    order_name: 'dfgfdh',
+    user_id: 2
+  },
+  {
+    _id: ObjectId('66d17f5cdb8e30e9152710be'),
+    order_id: 6,
+    order_price: 499,
+    order_name: 'dh',
+    user_id: 2
+  },
+  {
+    _id: ObjectId('66dab30047cb073f4d2710bd'),
+    order_id: 4,
+    order_price: 249,
+    order_name: 'mno',
+    user_id: 2
+  }
+]
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([
+...   { $match: { user_id: 2 } },
+...   {
+...     $lookup: {
+...       from: "orders",
+...       localField: "user_id",
+...       foreignField: user_id,
+...       as: "orderList",
+...     },
+...   },
+...   { $unwind: "$orderList" },
+...   {
+...     $lookup: {
+...       from: "products",
+...       localField: "orderList.product_id",
+...       foreignField: "product_id",
+...       as: "orderList.products",
+...     },
+...   },
+...   {
+...     $group: {
+...       name: { $first: "$name" },
+...       orders: { $push: "$orderList" },
+...     },
+...   },
+... ]);
+ReferenceError: user_id is not defined
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([
+...   { $match: { user_id: 2 } },
+...   {
+...     $lookup: {
+...       from: "orders",
+...       localField: "user_id",
+...       foreignField: "user_id",
+...       as: "orderList",
+...     },
+...   },
+...   { $unwind: "$orderList" },
+...   {
+...     $lookup: {
+...       from: "products",
+...       localField: "orderList.product_id",
+...       foreignField: "product_id",
+...       as: "orderList.products",
+...     },
+...   },
+...   {
+...     $group: {
+...       name: { $first: "$name" },
+...       user_id: { $first: "$user_id" },
+...       orders: { $push: "$orderList" },
+...     },
+...   },
+... ]);
+MongoServerError[Location15955]: a group specification must include an _id
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([
+...   { $match: { user_id: 2 } },
+...   {
+...     $lookup: {
+...       from: "orders",
+...       localField: "user_id",
+...       foreignField: "user_id",
+...       as: "orderList",
+...     },
+...   },
+...   { $unwind: "$orderList" },
+...   {
+...     $lookup: {
+...       from: "products",
+...       localField: "orderList.product_id",
+...       foreignField: "product_id",
+...       as: "orderList.products",
+...     },
+...   },
+...   {
+...     $group: {
+...       _id : "$_id",
+...       name: { $first: "$name" },
+...       user_id: { $first: "$user_id" },
+...       orders: { $push: "$orderList" },
+...     },
+...   },
+... ]);
+[
+  {
+    _id: ObjectId('66c84ae010df8caf532710bd'),
+    name: 'Mukul',
+    user_id: 2,
+    orders: [
+      {
+        _id: ObjectId('66d1793fdb8e30e9152710bc'),
+        order_id: 2,
+        order_price: 399,
+        order_name: 'fgb',
+        user_id: 2,
+        product_id: [ 1, 2 ],
+        products: [
+          {
+            _id: ObjectId('66e3c6126d86ff737d2710bc'),
+            product_id: 1,
+            product_price: 999,
+            product_name: 'Tshirt'
+          },
+          {
+            _id: ObjectId('66e3c6126d86ff737d2710bd'),
+            product_id: 2,
+            product_price: 1299,
+            product_name: 'Shirt'
+          }
+        ]
+      },
+      {
+        _id: ObjectId('66d17d71db8e30e9152710bd'),
+        order_id: 5,
+        order_price: 499,
+        order_name: 'dfgfdh',
+        user_id: 2,
+        products: []
+      },
+      {
+        _id: ObjectId('66d17f5cdb8e30e9152710be'),
+        order_id: 6,
+        order_price: 499,
+        order_name: 'dh',
+        user_id: 2,
+        products: []
+      },
+      {
+        _id: ObjectId('66dab30047cb073f4d2710bd'),
+        order_id: 4,
+        order_price: 249,
+        order_name: 'mno',
+        user_id: 2,
+        products: []
+      }
+    ]
+  }
+]
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([ { $match: { user_id: 2 } }, { $lookup: { from: "orders", localField: "user_id", foreignField: "user_id", as: "orderList" } }, { $unwind: "$orderList" }, { $lookup: { from: "products", localField: "orderList.product_id", foreignField: "product_id", as: "orderList.products" } }, { $group: { _id: "$_id", name: { $first: "$name" }, user_id: { $first: "$user_id" }, orders: { $push: "$orderList" } } }] ).explain("executionStats");
+{
+  explainVersion: '1',
+  stages: [
+    {
+      '$cursor': {
+        queryPlanner: {
+          namespace: 'ncu.users',
+          indexFilterSet: false,
+          parsedQuery: { user_id: { '$eq': 2 } },
+          queryHash: '20B525A3',
+          planCacheKey: '20B525A3',
+          maxIndexedOrSolutionsReached: false,
+          maxIndexedAndSolutionsReached: false,
+          maxScansToExplodeReached: false,
+          winningPlan: {
+            stage: 'PROJECTION_SIMPLE',
+            transformBy: { _id: 1, name: 1, user_id: 1 },
+            inputStage: {
+              stage: 'COLLSCAN',
+              filter: { user_id: { '$eq': 2 } },
+              direction: 'forward'
+            }
+          },
+          rejectedPlans: []
+        },
+        executionStats: {
+          executionSuccess: true,
+          nReturned: 1,
+          executionTimeMillis: 0,
+          totalKeysExamined: 0,
+          totalDocsExamined: 3,
+          executionStages: {
+            stage: 'PROJECTION_SIMPLE',
+            nReturned: 1,
+            executionTimeMillisEstimate: 0,
+            works: 4,
+            advanced: 1,
+            needTime: 2,
+            needYield: 0,
+            saveState: 1,
+            restoreState: 1,
+            isEOF: 1,
+            transformBy: { _id: 1, name: 1, user_id: 1 },
+            inputStage: {
+              stage: 'COLLSCAN',
+              filter: { user_id: { '$eq': 2 } },
+              nReturned: 1,
+              executionTimeMillisEstimate: 0,
+              works: 4,
+              advanced: 1,
+              needTime: 2,
+              needYield: 0,
+              saveState: 1,
+              restoreState: 1,
+              isEOF: 1,
+              direction: 'forward',
+              docsExamined: 3
+            }
+          }
+        }
+      },
+      nReturned: Long('1'),
+      executionTimeMillisEstimate: Long('0')
+    },
+    {
+      '$lookup': {
+        from: 'orders',
+        as: 'orderList',
+        localField: 'user_id',
+        foreignField: 'user_id',
+        unwinding: { preserveNullAndEmptyArrays: false }
+      },
+      totalDocsExamined: Long('12'),
+      totalKeysExamined: Long('0'),
+      collectionScans: Long('2'),
+      indexesUsed: [],
+      nReturned: Long('4'),
+      executionTimeMillisEstimate: Long('0')
+    },
+    {
+      '$lookup': {
+        from: 'products',
+        as: 'orderList.products',
+        localField: 'orderList.product_id',
+        foreignField: 'product_id'
+      },
+      totalDocsExamined: Long('12'),
+      totalKeysExamined: Long('0'),
+      collectionScans: Long('4'),
+      indexesUsed: [],
+      nReturned: Long('4'),
+      executionTimeMillisEstimate: Long('0')
+    },
+    {
+      '$group': {
+        _id: '$_id',
+        name: { '$first': '$name' },
+        user_id: { '$first': '$user_id' },
+        orders: { '$push': '$orderList' }
+      },
+      maxAccumulatorMemoryUsageBytes: { name: Long('72'), user_id: Long('72'), orders: Long('961') },
+      totalOutputDataSizeBytes: Long('1238'),
+      usedDisk: false,
+      spills: Long('0'),
+      spilledDataStorageSize: Long('0'),
+      numBytesSpilledEstimate: Long('0'),
+      spilledRecords: Long('0'),
+      nReturned: Long('1'),
+      executionTimeMillisEstimate: Long('0')
+    }
+  ],
+  serverInfo: {
+    host: 'cluster0-shard-00-02.bfd0n.mongodb.net',
+    port: 27017,
+    version: '7.0.12',
+    gitVersion: 'b6513ce0781db6818e24619e8a461eae90bc94fc'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 16793600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 33554432,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted'
+  },
+  command: {
+    aggregate: 'users',
+    pipeline: [
+      { '$match': { user_id: 2 } },
+      {
+        '$lookup': {
+          from: 'orders',
+          localField: 'user_id',
+          foreignField: 'user_id',
+          as: 'orderList'
+        }
+      },
+      { '$unwind': '$orderList' },
+      {
+        '$lookup': {
+          from: 'products',
+          localField: 'orderList.product_id',
+          foreignField: 'product_id',
+          as: 'orderList.products'
+        }
+      },
+      {
+        '$group': {
+          _id: '$_id',
+          name: { '$first': '$name' },
+          user_id: { '$first': '$user_id' },
+          orders: { '$push': '$orderList' }
+        }
+      }
+    ],
+    cursor: {},
+    '$db': 'ncu'
+  },
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1726820044, i: 2 }),
+    signature: {
+      hash: Binary.createFromBase64('IE2dVcVdMjGBbid8a4I+pAirVpY=', 0),
+      keyId: Long('7405279240490319877')
+    }
+  },
+  operationTime: Timestamp({ t: 1726820044, i: 2 })
+}
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.find({user_id : 2});
+[
+  {
+    _id: ObjectId('66c84ae010df8caf532710bd'),
+    user_id: 2,
+    name: 'Mukul',
+    ph_no: 98765876
+  }
+]
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.find({user_id : 2}, {_id : 0 , ph_no : 0});
+[ { user_id: 2, name: 'Mukul' } ]
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([{$sort : {_id : -1}}, {$project : {_id : 0 , ph_no : 0}}]);
+[
+  { user_id: 3, name: 'Nilesh' },
+  { user_id: 2, name: 'Mukul' },
+  { user_id: 1, name: 'Lokesh' }
+]
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([{$sort : {_id : -1}},{$addField : {age  : 10}}, {$project : {_id : 0 , ph_no : 0}}]);
+MongoServerError[AtlasError]: $addField is not allowed or the syntax is incorrect, see the Atlas documentation for more information
+Atlas atlas-119p6w-shard-0 [primary] ncu> db.users.aggregate([{$sort : {_id : -1}},{$addFields : {age  : 10}}, {$project : {_id : 0 , ph_no : 0}}]);
+[
+  { user_id: 3, name: 'Nilesh', age: 10 },
+  { user_id: 2, name: 'Mukul', age: 10 },
+  { user_id: 1, name: 'Lokesh', age: 10 }
+]
+Atlas atlas-119p6w-shard-0 [primary] ncu>
